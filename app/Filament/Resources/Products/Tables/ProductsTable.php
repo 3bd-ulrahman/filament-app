@@ -18,7 +18,10 @@ class ProductsTable
                 TextColumn::make('name')->label('Name')
                     ->sortable()
                     ->searchable(isIndividual: true, isGlobal: false),
-                TextColumn::make('price')->label('Price')->money('usd')->sortable(),
+
+                TextColumn::make('price')->label('Price')
+                    ->money('usd', 100)
+                    ->sortable()
             ])
             ->filters([
                 //
