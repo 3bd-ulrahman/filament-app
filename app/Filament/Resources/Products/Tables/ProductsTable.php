@@ -21,7 +21,10 @@ class ProductsTable
 
                 TextColumn::make('price')->label('Price')
                     ->money('usd', 100)
-                    ->sortable()
+                    ->sortable(),
+
+                TextColumn::make('status'),
+                TextColumn::make('category.name')
             ])
             ->filters([
                 //

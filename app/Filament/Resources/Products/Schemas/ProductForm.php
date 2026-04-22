@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Models\Enums\ProductStatusEnum;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -14,9 +16,18 @@ class ProductForm
                 TextInput::make('name')
                     ->required()
                     ->unique(),
+
                 TextInput::make('price')
                     ->numeric()
-                    ->prefix('$')
+                    ->prefix('$'),
+
+                Select::make('status')
+                    ->options(array_column(ProductStatusEnum::cases(), 'value', 'value'))
+                    ->required(),
+
+                Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->required(),
             ]);
     }
 }
