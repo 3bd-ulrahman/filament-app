@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Filament\Tables\CategoriesTable;
 use App\Models\Enums\ProductStatusEnum;
+use Filament\Forms\Components\ModalTableSelect;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -25,8 +27,9 @@ class ProductForm
                     ->options(array_column(ProductStatusEnum::cases(), 'value', 'value'))
                     ->required(),
 
-                Select::make('category_id')
+                ModalTableSelect::make('category_id')
                     ->relationship('category', 'name')
+                    ->tableConfiguration(CategoriesTable::class)
                     ->required(),
             ]);
     }
