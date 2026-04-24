@@ -17,7 +17,7 @@ class ProductForm
             ->components([
                 TextInput::make('name')
                     ->required()
-                    ->unique(),
+                    ->unique('products', 'name', ignoreRecord: true),
 
                 TextInput::make('price')
                     ->numeric()
@@ -25,6 +25,11 @@ class ProductForm
 
                 Select::make('status')
                     ->options(array_column(ProductStatusEnum::cases(), 'value', 'value'))
+                    ->required(),
+
+                Select::make('tags')
+                    ->relationship('tags', 'name')
+                    ->multiple()
                     ->required(),
 
                 ModalTableSelect::make('category_id')
