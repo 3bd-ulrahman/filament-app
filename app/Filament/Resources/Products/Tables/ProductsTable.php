@@ -2,12 +2,18 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Models\Enums\ProductStatusEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductsTable
 {
@@ -27,11 +33,26 @@ class ProductsTable
 
                 TextColumn::make('category.name'),
 
-                TextColumn::make('tags.name')
+                TextColumn::make('tags.name')->badge()
+                    ->limitList(3)
+                    ->tooltip(fn ($record) => $record->tags->pluck('name')->join(', '))
             ])
             ->filters([
-                //
-            ])
+                SelectFilter::make('status')->options(ProductStatusEnum::class),
+                SelectFilter::make('category')->relationship('category', 'name'),
+                Filter::make('created_at')
+                    ->schema([
+                        DatePicker::make('created_from')->label('Created From'),
+                        DatePicker::make('created_until')->label('Created Until'),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        $query->when($data['created_from'], function ($query, $date) {
+                            $query->whereDate('created_at', '>=', $date);
+                        })->when($data['created_until'], function ($query, $date) {
+                            $query->whereDate('created_at', '<=', $date);
+                        });
+                    }),
+            ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
