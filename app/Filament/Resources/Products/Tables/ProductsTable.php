@@ -40,19 +40,26 @@ class ProductsTable
             ->filters([
                 SelectFilter::make('status')->options(ProductStatusEnum::class),
                 SelectFilter::make('category')->relationship('category', 'name'),
-                Filter::make('created_at')
+                Filter::make('created_from')
                     ->schema([
                         DatePicker::make('created_from')->label('Created From'),
-                        DatePicker::make('created_until')->label('Created Until'),
                     ])
                     ->query(function (Builder $query, array $data) {
                         $query->when($data['created_from'], function ($query, $date) {
                             $query->whereDate('created_at', '>=', $date);
-                        })->when($data['created_until'], function ($query, $date) {
+                        });
+                    }),
+
+                Filter::make('created_until')
+                    ->schema([
+                        DatePicker::make('created_until')->label('Created Until'),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        $query->when($data['created_until'], function ($query, $date) {
                             $query->whereDate('created_at', '<=', $date);
                         });
                     }),
-            ], layout: FiltersLayout::AboveContent)
+            ], layout: FiltersLayout::AboveContentCollapsible)
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()
