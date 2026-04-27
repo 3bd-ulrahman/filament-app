@@ -3,12 +3,18 @@
 namespace App\Models\Enums;
 
 use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
 
-enum ProductStatusEnum: string implements HasColor
+enum ProductStatusEnum: string implements HasLabel, HasColor
 {
     case IN_STOCK = 'In Stock';
     case SOLD_OUT = 'Sold Out';
     case COMING_SOON = 'Coming Soon';
+
+    public function getLabel(): string
+    {
+        return $this->value;
+    }
 
     public function getColor(): string
     {

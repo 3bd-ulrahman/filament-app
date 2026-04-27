@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->integer('price');
+            $table->boolean('is_active')->default(true);
             $table->string('status', 20)->default(ProductStatusEnum::IN_STOCK->value);
             $table->text('description')->nullable();
             $table->timestamps();
