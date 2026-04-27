@@ -52,7 +52,7 @@ class TagResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageTags::route('/')
+            'index' => ManageTags::route('/'),
         ];
     }
 }

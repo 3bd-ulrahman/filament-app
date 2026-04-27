@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Enums\ProductStatusEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,8 +20,15 @@ class Product extends Model
         'name',
         'price',
         'status',
-        'description'
+        'description',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'status' => ProductStatusEnum::class
+        ];
+    }
 
     // Accessors & Mutators
     protected function price(): Attribute

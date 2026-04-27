@@ -21,7 +21,8 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Name')
+                TextColumn::make('name')
+                    ->label('Name')
                     ->sortable()
                     ->searchable(isIndividual: true, isGlobal: false),
 
@@ -29,13 +30,16 @@ class ProductsTable
                     ->money('usd', 100)
                     ->sortable(),
 
-                TextColumn::make('status'),
+                TextColumn::make('status')->badge(),
 
                 TextColumn::make('category.name'),
 
                 TextColumn::make('tags.name')->badge()
                     ->limitList(3)
-                    ->tooltip(fn ($record) => $record->tags->pluck('name')->join(', '))
+                    ->tooltip(fn ($record) => $record->tags->pluck('name')->join(', ')),
+
+                TextColumn::make('created_at')
+                    ->since(),
             ])
             ->filters([
                 SelectFilter::make('status')->options(ProductStatusEnum::class),
@@ -62,7 +66,7 @@ class ProductsTable
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make()
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

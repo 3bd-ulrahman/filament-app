@@ -34,7 +34,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            TagsRelationManager::class
+            TagsRelationManager::class,
         ];
     }
 
@@ -43,7 +43,7 @@ class ProductResource extends Resource
         return [
             'index' => ListProducts::route('/'),
             'create' => CreateProduct::route('/create'),
-            'edit' => EditProduct::route('/{record}/edit')
+            'edit' => EditProduct::route('/{record}/edit'),
         ];
     }
 }
