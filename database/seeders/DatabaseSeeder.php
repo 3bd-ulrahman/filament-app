@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProductSeeder::class,
             TagSeeder::class,
+            OrderSeeder::class
         ]);
     }
 }
