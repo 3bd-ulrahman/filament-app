@@ -22,6 +22,7 @@ class OrderFactory extends Factory
         return [
             'user_id' => User::factory(),
             'product_id' => Product::factory(),
+            'is_completed' => fake()->boolean(),
             'price' => fake()->randomNumber(3)
         ];
     }

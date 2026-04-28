@@ -2,9 +2,14 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
+use App\Models\Order;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -41,12 +46,25 @@ class OrdersTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    Action::make('Mark as completed')
+                        ->requiresConfirmation()
+                        ->icon(Heroicon::OutlinedCheckBadge)
+                        ->hidden(fn (Order $order) => $order->is_completed)
+                        ->action(fn (Order $order) => $order->update(['is_completed' => true]))
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                ]),
+
+                    BulkAction::make('Mark as completed')
+                        ->requiresConfirmation()
+                        ->icon(Heroicon::OutlinedCheckBadge)
+                        ->action(fn (array $records) => Order::whereIn('id', $records)->update(['is_completed' => true]))
+                        ->deselectRecordsAfterCompletion()
+                ])
             ]);
     }
 }
